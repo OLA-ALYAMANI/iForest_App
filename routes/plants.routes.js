@@ -28,8 +28,8 @@ router.get("/plant/:id", (req, res) => {
 
 //CREATE
 router.post("/plant/create", (req, res) => {
-  const { name, image, description, type } = req.body;
-  const valid = { name, image, description, type };
+  const { name, image, description, type, user } = req.body;
+  const valid = { name, image, description, type, user };
   let plant = new Plant(valid);
   plant
     .save()
