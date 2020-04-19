@@ -34,7 +34,7 @@ router.post("/plant/create", (req, res) => {
   plant
     .save()
     .then(() => {
-      return res.json({ plant });
+      return res.json({ message: plant });
     })
     .catch((err) => {
       console.log("err", err);
@@ -70,7 +70,9 @@ router.delete("/plant/:id", (req, res) => {
     .then((plant) => {
       //need token decode TODO
       if (plant.user == req.user) {
-        Plant.deleteOne(req.params.id);
+          Plant.deleteOne(req.params.id).then(() => {
+              res.json({ message: `${plant.name} Updated` });
+          })
       }
     })
     .catch((err) => {
