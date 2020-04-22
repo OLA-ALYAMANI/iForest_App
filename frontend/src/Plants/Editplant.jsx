@@ -20,7 +20,7 @@ export default class Editplant extends Component {
         this.getPlants();
     }
 
-    getPlants()  {
+    getPlants() {
         let plantId = this.props.match.params.id;
         Axios.get(`${URL}/api/plant/${plantId}`)
             .then(res => {
@@ -44,11 +44,18 @@ export default class Editplant extends Component {
         setFile: null
     }
 
-    onChangeHandler = (event) => {
-        
-       this.setFile(event.target.files[0])
-        // setFile(event.target.getAttribute("id"))
+
+    editPlant(newPlant){
+        Axios.request({
+            method:"put",
+            usrl:`${URL}/api/plant/${this.state.id}`,
+            data:newPlant
+        }).then(res => {
+            this.props.history.push('/')
+        })
+        .catch(err =>{ console.log(err) })
     }
+    
 
     onChangeInput = ({ target: { name, value } }) => {
         this.setPlant({ ...this.plant, [name]: value });
@@ -60,6 +67,12 @@ export default class Editplant extends Component {
             description: this.name.description.value
         }
         this.editPlant(newPlant);
+    }
+
+
+    onChangeHandler = (event) => {
+        const setFile = event.target.files[0]
+        // setFile(event.target.getAttribute("id"))
     }
 
     onSubmit = () => {
@@ -89,12 +102,12 @@ export default class Editplant extends Component {
                         <Col md={6}>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label>Plant name</Form.Label>
-                                <Form.Control 
-                                type="text" 
-                                placeholder="plant name" 
-                                name="name" 
-                                onChange={this.onChangeInput} 
-                                value={this.state.name}/>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="plant name"
+                                    name="name"
+                                    onChange={this.onChangeInput}
+                                    defaultValue={this.state.name} />
                             </Form.Group>
                         </Col>
                     </Row>
@@ -103,7 +116,7 @@ export default class Editplant extends Component {
                         <Col md={2}>
                             <Form.Group controlId="exampleForm.ControlSelect1">
                                 <Form.Label>Plant Type</Form.Label>
-                                <Form.Control as="select" name="type" value={this.state.type} onChange={this.onChangeInput}>
+                                <Form.Control as="select" name="type" defaultValue={this.state.type} onChange={this.onChangeInput}>
                                     <option>Flower</option>
                                     <option>Liverworts</option>
                                     <option>Hornworts</option>
@@ -122,7 +135,7 @@ export default class Editplant extends Component {
                                 name="image"
                                 onChange={this.onChangeHandler}
                                 custom
-                                value={this.state.imag}
+                                defaultValue={this.state.imag}
                             />
                         </Col>
                     </Row>
@@ -130,7 +143,7 @@ export default class Editplant extends Component {
                         <Col md={6}>
                             <Form.Group controlId="exampleForm.ControlTextarea1">
                                 <Form.Label>Description</Form.Label>
-                                <Form.Control as="textarea" rows="3" name="description" value={this.state.description}/>
+                                <Form.Control as="textarea" rows="3" name="description" defaultValue={this.state.description} />
                             </Form.Group>
 
                             <Button variant="primary" type="submit" onClick={this.onSubmit}>Edit</Button>
